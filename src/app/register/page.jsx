@@ -44,7 +44,7 @@ const page = () => {
 
 	return (
 		<>
-			<main className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+			<main className="max-w-md mx-auto mt-8 p-6 rounded-lg shadow-md">
 				<h1 className="text-2xl font-bold mb-6 text-center">
 					Register Account
 				</h1>
@@ -157,9 +157,13 @@ const page = () => {
 					<button
 						type="submit"
 						disabled={isLoading}
-						className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+						className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
 					>
-						{isLoading ? "Loading..." : "Register"}
+						{isLoading ? (
+							<span className="loading loading-infinity loading-xl"></span>
+						) : (
+							"Register"
+						)}
 					</button>
 				</form>
 			</main>
