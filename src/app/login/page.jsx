@@ -1,13 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import axios from "../../lib/axios";
-import React from "react";
+import React, { useId } from "react";
 import { useState } from "react";
 import Link from "next/link";
 
 const page = () => {
-	const router = useRouter();
 	const [error, setError] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
@@ -21,14 +19,22 @@ const page = () => {
 		setError({});
 
 		try {
-			await axios.post("/login", formData);
+			const response = await axios.post("/login", formData);
+			const userId = parseInt(response.data?.user?.id);
+
 			setFormData({
 				email: "",
 				password: "",
 			});
-			router.push("/");
+
+			await fetch("api/session", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ userId }),
+			});
 		} catch (err) {
-			console.log(err);
 			setError(err?.response?.data?.errors || {});
 			setFormData({
 				...formData,
