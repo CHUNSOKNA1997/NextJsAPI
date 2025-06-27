@@ -4,13 +4,14 @@ import axios from "../../lib/axios";
 import { useState } from "react";
 import Link from "next/link";
 import { SparklesText } from "@/components/magicui/sparkles-text";
+import { redirect } from "next/navigation";
 
 const page = () => {
 	const [error, setError] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
-		email: "",
-		password: "",
+		email: "diasyui@testing.com",
+		password: "12345678",
 	});
 
 	const submitCallback = async (e) => {
@@ -20,20 +21,14 @@ const page = () => {
 
 		try {
 			const response = await axios.post("/login", formData);
-			const userId = parseInt(response.data?.user?.id);
+			const token = response?.data?.token;
+			localStorage.setItem("token", token);
 
 			setFormData({
 				email: "",
 				password: "",
 			});
-
-			await fetch("api/session", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ userId }),
-			});
+			// router.push("/dashboard");
 		} catch (err) {
 			setError(err?.response?.data?.errors || {});
 			setFormData({
