@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
 
 export default async function RootLayout({ children }) {
 	return (
@@ -39,7 +40,12 @@ export default async function RootLayout({ children }) {
 					</nav>
 
 					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-						<div className="pt-20 pb-12">{children}</div>
+						<div className="pt-20 pb-12">
+							<AuthProvider>
+								{/* Your Navbar and other layout components can go here */}
+								{children}
+							</AuthProvider>
+						</div>
 					</div>
 				</main>
 			</body>
