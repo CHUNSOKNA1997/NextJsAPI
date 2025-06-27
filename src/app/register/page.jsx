@@ -5,6 +5,7 @@ import axios from "../../lib/axios";
 import React from "react";
 import { useState } from "react";
 import Link from "next/link";
+import { SparklesText } from "@/components/magicui/sparkles-text";
 
 const page = () => {
 	const router = useRouter();
@@ -44,11 +45,9 @@ const page = () => {
 	};
 
 	return (
-		<>
-			<main className="max-w-md mx-auto mt-8 p-6 rounded-lg shadow-md">
-				<h1 className="text-2xl font-bold mb-6 text-center">
-					Register Account
-				</h1>
+		<div className="flex items-center justify-center">
+			<main className="max-w-md w-full mx-auto p-6 rounded-lg shadow-md">
+				<SparklesText className="text-3xl mb-6 ">Register Account</SparklesText>
 
 				<form onSubmit={submitCallback} className="space-y-4">
 					<div className="flex flex-col gap-1">
@@ -63,7 +62,7 @@ const page = () => {
 							type="text"
 							name="name"
 							id="name"
-							disabled={isLoading} // Disable input while loading
+							disabled={isLoading}
 							className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 						/>
 						{error.name && (
@@ -83,7 +82,7 @@ const page = () => {
 							type="email"
 							name="email"
 							id="email"
-							disabled={isLoading} // Disable input while loading
+							disabled={isLoading}
 							className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 ${
 								error.email ? "border-red-500" : ""
 							}`}
@@ -105,7 +104,7 @@ const page = () => {
 							type="password"
 							name="password"
 							id="password"
-							disabled={isLoading} // Disable input while loading
+							disabled={isLoading}
 							className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 ${
 								error.password ? "border-red-500" : ""
 							}`}
@@ -143,7 +142,7 @@ const page = () => {
 							type="password"
 							name="password_confirmation"
 							id="password_confirmation"
-							disabled={isLoading} // Disable input while loading
+							disabled={isLoading}
 							className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 ${
 								error.password_confirmation ? "border-red-500" : ""
 							}`}
@@ -166,7 +165,7 @@ const page = () => {
 							"Register"
 						)}
 					</button>
-					<div className="flex text-sm gap-2">
+					<div className="flex text-sm gap-2 justify-center">
 						<p>Already have an account?</p>
 						<Link href={"/login"} className="text-blue-400 hover:underline">
 							Login to your account
@@ -174,7 +173,7 @@ const page = () => {
 					</div>
 				</form>
 			</main>
-		</>
+		</div>
 	);
 };
 
