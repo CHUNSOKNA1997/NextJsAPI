@@ -1,9 +1,9 @@
 "use client";
 
 import axios from "../../lib/axios";
-import React, { useId } from "react";
 import { useState } from "react";
 import Link from "next/link";
+import { SparklesText } from "@/components/magicui/sparkles-text";
 
 const page = () => {
 	const [error, setError] = useState({});
@@ -46,9 +46,11 @@ const page = () => {
 	};
 
 	return (
-		<>
-			<main className="max-w-md mx-auto mt-8 p-6 rounded-lg shadow-md">
-				<h1 className="text-2xl font-bold mb-6 text-center">Welcome back!!</h1>
+		<div className="min-h-screen flex items-center justify-center">
+			<main className="max-w-md w-full mx-auto p-6 rounded-lg shadow-md">
+				<SparklesText className="text-3xl mb-6">
+					Login to your account
+				</SparklesText>
 
 				<form onSubmit={submitCallback} className="space-y-4">
 					<div className="flex flex-col gap-1">
@@ -111,7 +113,7 @@ const page = () => {
 						className="w-full py-2 px-4 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed hover:cursor-pointer"
 					>
 						{isLoading ? (
-							<span className="loading loading-infinity loading-xl" />
+							<span className="loading loading-infinity loading-md" />
 						) : (
 							"Login"
 						)}
@@ -124,7 +126,7 @@ const page = () => {
 					</div>
 				</form>
 			</main>
-		</>
+		</div>
 	);
 };
 
