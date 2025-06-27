@@ -22,6 +22,7 @@ const page = () => {
 		try {
 			const response = await axios.post("/login", formData);
 			const token = response?.data?.token;
+
 			localStorage.setItem("token", token);
 
 			setFormData({
