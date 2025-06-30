@@ -1,10 +1,11 @@
 "use client";
 import axios from "../../lib/axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { useAuth } from "@/contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
 	const [error, setError] = useState({});
@@ -36,7 +37,7 @@ const LoginPage = () => {
 				email: "",
 				password: "",
 			});
-
+			toast.success("Login successful!");
 			router.push("/dashboard");
 		} catch (err) {
 			setError(err?.response?.data?.errors || {});

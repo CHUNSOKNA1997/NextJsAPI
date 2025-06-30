@@ -47,8 +47,22 @@ export const AuthProvider = ({ children }) => {
 		setUser(userData);
 	};
 
+	// Login function
+	const login = (userData, token) => {
+		setUser(userData);
+		Cookies.set("auth_token", token);
+	};
+
+	// Logout function - this is what was missing
+	const logout = () => {
+		setUser(null);
+		Cookies.remove("auth_token");
+	};
+
 	const value = {
 		user,
+		login,
+		logout,
 		loading,
 		setAuthUser,
 	};
