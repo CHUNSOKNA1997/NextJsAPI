@@ -3,15 +3,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import axios from "@/lib/axios";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function Page() {
 	const { user, authLoading } = useAuth();
 	const [products, setProducts] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const router = useRouter();
 
+	/**
+	 * Fetch products from API on component mount
+	 */
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
@@ -28,14 +29,20 @@ export default function Page() {
 			}
 		};
 
-		// Only fetch products if user is authenticated and not loading
-		if (!authLoading && user) {
+		/**
+		 * Only fetch products if user is authenticated
+		 */
+		if (user) {
 			fetchProducts();
-		} else if (!authLoading && !user) {
+		} else if (!user) {
 			setIsLoading(false);
 		}
 	}, [user, authLoading]);
 
+	/**
+	 * Delte a specific product with uuid
+	 * @param {*} uuid
+	 */
 	const deleteCallback = async (uuid) => {
 		try {
 			await axios.delete(`/v1/products/${uuid}`);
@@ -46,19 +53,10 @@ export default function Page() {
 			console.error("Error deleting product:", err);
 		}
 	};
-	// Show loading state while checking authentication
-	if (authLoading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center text-white">
-				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
-					<p>Loading...</p>
-				</div>
-			</div>
-		);
-	}
 
-	// Show login prompt if not authenticated
+	/**
+	 * Show login prompt if not authenticated
+	 */
 	if (!user) {
 		return (
 			<div className="min-h-screen flex items-center justify-center text-white">
@@ -70,7 +68,9 @@ export default function Page() {
 		);
 	}
 
-	// Show loading state while fetching products
+	/**
+	 * Show loading state while fetching products
+	 */
 	if (isLoading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center text-white">
@@ -82,7 +82,9 @@ export default function Page() {
 		);
 	}
 
-	// Show error state
+	/**
+	 * Show error state if there is an error
+	 */
 	if (error) {
 		return (
 			<div className="min-h-screen flex items-center justify-center text-white">
