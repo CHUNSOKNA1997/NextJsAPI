@@ -153,9 +153,12 @@ export default function Page() {
 											{product.quantity}
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-											<button className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
+											<Link
+												href={`${product.uuid}/edit-product`}
+												className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+											>
 												Edit
-											</button>
+											</Link>
 										</td>
 									</tr>
 								))}
