@@ -14,7 +14,9 @@ const page = () => {
 		quantity: "",
 	});
 
-	// Get product Detail
+	/**
+	 * Fetch product data on component mount
+	 */
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -34,6 +36,10 @@ const page = () => {
 		if (uuid) fetchData();
 	}, [uuid]);
 
+	/**
+	 * Handle form changes
+	 * @param {*} e
+	 */
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -43,6 +49,10 @@ const page = () => {
 		}));
 	};
 
+	/**
+	 * Handle form submission
+	 * @param {*} e
+	 */
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 

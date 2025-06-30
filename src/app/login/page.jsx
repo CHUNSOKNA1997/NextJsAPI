@@ -10,13 +10,17 @@ const LoginPage = () => {
 	const [error, setError] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
-		email: "diasyui@testing.com",
-		password: "12345678",
+		email: "",
+		password: "",
 	});
 
 	const { setAuthUser, loading } = useAuth();
 	const router = useRouter();
 
+	/**
+	 * Handle form submission
+	 * @param {} e
+	 */
 	const submitCallback = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
@@ -45,6 +49,8 @@ const LoginPage = () => {
 		}
 	};
 
+	/**
+	 * Show loading animation */
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center min-h-screen">

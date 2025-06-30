@@ -21,6 +21,10 @@ const page = () => {
 	const { setAuthUser, loaing } = useAuth();
 	const router = useRouter();
 
+	/**
+	 * Handle form submission
+	 * @param {} e
+	 */
 	const submitCallback = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
@@ -53,6 +57,8 @@ const page = () => {
 		}
 	};
 
+	/**
+	 * Show loading animation */
 	if (loaing) {
 		return (
 			<div className="flex items-center justify-center min-h-screen">

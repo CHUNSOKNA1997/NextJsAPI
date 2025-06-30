@@ -10,6 +10,9 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
 
+	/**
+	 * Check authentication on page load
+	 */
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
@@ -29,7 +32,11 @@ export const AuthProvider = ({ children }) => {
 		checkAuth();
 	}, []);
 
-	// Function to set user after successful login/register
+	/**
+	 * Function to set user after successful login/register
+	 * @param {*} userData
+	 * @param {*} token
+	 */
 	const setAuthUser = (userData, token) => {
 		if (token) {
 			Cookies.set("auth_token", token, {
@@ -46,6 +53,9 @@ export const AuthProvider = ({ children }) => {
 		setAuthUser,
 	};
 
+	/**
+	 * Set value of AuthContext with a value of user, loading, and setAuthUser
+	 */
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

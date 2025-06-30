@@ -13,6 +13,10 @@ const page = () => {
 		quantity: "",
 	});
 
+	/**
+	 * Handle form changes
+	 * @param {*} e
+	 */
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 
@@ -22,6 +26,10 @@ const page = () => {
 		}));
 	};
 
+	/**
+	 * Handle form submission
+	 * @param {*} e
+	 */
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
