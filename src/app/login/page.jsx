@@ -1,18 +1,27 @@
 "use client";
-
 import axios from "../../lib/axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SparklesText } from "@/components/magicui/sparkles-text";
-import { redirect } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
-const page = () => {
+const LoginPage = () => {
 	const [error, setError] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
 		email: "diasyui@testing.com",
 		password: "12345678",
 	});
+
+	const { setAuthUser, isAuthenticated, loading } = useAuth();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!loading && isAuthenticated) {
+			router.push("/dashboard");
+		}
+	}, [isAuthenticated, loading, router]);
 
 	const submitCallback = async (e) => {
 		e.preventDefault();
@@ -21,15 +30,16 @@ const page = () => {
 
 		try {
 			const response = await axios.post("/login", formData);
-			const token = response?.data?.token;
+			const { token, user } = response.data;
 
-			localStorage.setItem("token", token);
+			setAuthUser(user, token);
 
 			setFormData({
 				email: "",
 				password: "",
 			});
-			// router.push("/dashboard");
+
+			router.push("/dashboard");
 		} catch (err) {
 			setError(err?.response?.data?.errors || {});
 			setFormData({
@@ -41,13 +51,24 @@ const page = () => {
 		}
 	};
 
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<span className="loading loading-infinity loading-lg" />
+			</div>
+		);
+	}
+
+	if (isAuthenticated) {
+		return null;
+	}
+
 	return (
-		<div className="flex items-center justify-center">
+		<div className="flex items-center justify-center min-h-screen">
 			<main className="max-w-md w-full mx-auto p-6 rounded-lg shadow-md">
 				<SparklesText className="text-3xl mb-6">
 					Login to your account
 				</SparklesText>
-
 				<form onSubmit={submitCallback} className="space-y-4">
 					<div className="flex flex-col gap-1">
 						<label htmlFor="email" className="text-sm font-medium mb-2">
@@ -67,10 +88,11 @@ const page = () => {
 							}`}
 						/>
 						{error.email && (
-							<small className="text-sm text-red-500">{error.email}</small>
+							<small className="text-sm text-red-500">
+								{Array.isArray(error.email) ? error.email[0] : error.email}
+							</small>
 						)}
 					</div>
-
 					<div className="flex flex-col gap-1">
 						<label htmlFor="password" className="text-sm font-medium mb-2">
 							Password
@@ -95,13 +117,24 @@ const page = () => {
 										error.password?.length > 1 ? "list-disc pl-4" : ""
 									}`}
 								>
-									{error.password?.map((err, index) => (
-										<li key={index}>{err}</li>
-									))}
+									{Array.isArray(error.password) ? (
+										error.password.map((err, index) => (
+											<li key={index}>{err}</li>
+										))
+									) : (
+										<li>{error.password}</li>
+									)}
 								</ul>
 							</small>
 						)}
 					</div>
+
+					{/* General error message */}
+					{error.general && (
+						<div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+							{error.general}
+						</div>
+					)}
 
 					<button
 						type="submit"
@@ -126,4 +159,4 @@ const page = () => {
 	);
 };
 
-export default page;
+export default LoginPage;

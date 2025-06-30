@@ -1,4 +1,7 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+
+// lib/axios.js
 
 const APP_URL = process.env.NEXT_PUBLIC_API;
 
@@ -12,13 +15,12 @@ const axiosInstance = axios.create({
 	withCredentials: true,
 });
 
+// Add token to requests if it is exist
 axiosInstance.interceptors.request.use(
 	(config) => {
-		if (typeof window !== "undefined") {
-			const token = localStorage.getItem("token");
-			if (token) {
-				config.headers.Authorization = `Bearer ${token}`;
-			}
+		const token = Cookies.get("auth_token");
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
 		}
 		return config;
 	},
@@ -27,14 +29,13 @@ axiosInstance.interceptors.request.use(
 	}
 );
 
+// Handle toke expiration
 axiosInstance.interceptors.response.use(
 	(response) => response,
 	(error) => {
 		if (error.response?.status === 401) {
-			if (typeof window !== "undefined") {
-				localStorage.removeItem("token");
-				window.location.href = "/login";
-			}
+			Cookies.remove("auth_token");
+			window.location.href = "/login";
 		}
 		return Promise.reject(error);
 	}

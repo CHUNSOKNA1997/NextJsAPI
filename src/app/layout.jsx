@@ -1,6 +1,6 @@
 import Link from "next/link";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export default async function RootLayout({ children }) {
 	return (
