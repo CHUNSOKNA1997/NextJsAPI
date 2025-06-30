@@ -1,4 +1,5 @@
 "use client";
+
 import axios from "@/lib/axios";
 import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -33,7 +34,6 @@ export const AuthProvider = ({ children }) => {
 		if (token) {
 			Cookies.set("auth_token", token, {
 				expires: 7,
-				secure: process.env.NODE_ENV === "production",
 				sameSite: "strict",
 			});
 		}
@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }) => {
 	const value = {
 		user,
 		loading,
-		isAuthenticated: !!user,
 		setAuthUser,
 	};
 

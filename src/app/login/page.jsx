@@ -2,7 +2,7 @@
 import axios from "../../lib/axios";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { SparklesText } from "@/components/magicui/sparkles-text";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -16,12 +16,6 @@ const LoginPage = () => {
 
 	const { setAuthUser, isAuthenticated, loading } = useAuth();
 	const router = useRouter();
-
-	useEffect(() => {
-		if (!loading && isAuthenticated) {
-			router.push("/dashboard");
-		}
-	}, [isAuthenticated, loading, router]);
 
 	const submitCallback = async (e) => {
 		e.preventDefault();
