@@ -3,12 +3,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import axios from "@/lib/axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
 	const { user, authLoading } = useAuth();
 	const [products, setProducts] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const router = useRouter();
 
 	useEffect(() => {
 		const fetchProducts = async () => {
@@ -34,6 +36,16 @@ export default function Page() {
 		}
 	}, [user, authLoading]);
 
+	const deleteCallback = async (uuid) => {
+		try {
+			await axios.delete(`/v1/products/${uuid}`);
+			setProducts((prevProducts) =>
+				prevProducts.filter((product) => product.uuid !== uuid)
+			);
+		} catch (err) {
+			console.error("Error deleting product:", err);
+		}
+	};
 	// Show loading state while checking authentication
 	if (authLoading) {
 		return (
@@ -152,13 +164,21 @@ export default function Page() {
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-zinc-100">
 											{product.quantity}
 										</td>
-										<td className="px-6 py-4 whitespace-nowrap text-right text-sm">
+										<td className="px-6 py-4 whitespace-nowrap text-right text-sm flex gap-4">
 											<Link
 												href={`${product.uuid}/edit-product`}
-												className="text-blue-400 hover:text-blue-300 font-medium transition-colors"
+												className="text-blue-500 hover:underline font-medium transition-colors"
 											>
 												Edit
 											</Link>
+											<button
+												onClick={() => {
+													deleteCallback(product.uuid);
+												}}
+												className="text-red-500 hover:underline font-medium transition-colors hover:cursor-pointer"
+											>
+												Delete
+											</button>
 										</td>
 									</tr>
 								))}
