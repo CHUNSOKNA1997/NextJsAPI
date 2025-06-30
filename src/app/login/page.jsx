@@ -61,7 +61,7 @@ const LoginPage = () => {
 	}
 
 	return (
-		<div className="flex items-center justify-center min-h-screen">
+		<div className="flex items-center justify-center">
 			<main className="max-w-md w-full mx-auto p-6 rounded-lg shadow-md">
 				<SparklesText className="text-3xl mb-6">
 					Login to your account
