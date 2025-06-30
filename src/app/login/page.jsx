@@ -14,7 +14,7 @@ const LoginPage = () => {
 		password: "12345678",
 	});
 
-	const { setAuthUser, isAuthenticated, loading } = useAuth();
+	const { setAuthUser, loading } = useAuth();
 	const router = useRouter();
 
 	const submitCallback = async (e) => {
@@ -51,10 +51,6 @@ const LoginPage = () => {
 				<span className="loading loading-infinity loading-lg" />
 			</div>
 		);
-	}
-
-	if (isAuthenticated) {
-		return null;
 	}
 
 	return (

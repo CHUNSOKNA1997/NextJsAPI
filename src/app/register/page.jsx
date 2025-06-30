@@ -6,9 +6,9 @@ import React from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { SparklesText } from "@/components/magicui/sparkles-text";
+import { useAuth } from "@/contexts/AuthContext";
 
 const page = () => {
-	const router = useRouter();
 	const [error, setError] = useState({});
 	const [isLoading, setIsLoading] = useState(false);
 	const [formData, setFormData] = useState({
@@ -18,19 +18,28 @@ const page = () => {
 		password_confirmation: "",
 	});
 
+	const { setAuthUser, loaing } = useAuth();
+	const router = useRouter();
+
 	const submitCallback = async (e) => {
 		e.preventDefault();
 		setIsLoading(true);
 		setError({});
 
 		try {
-			await axios.post("/register", formData);
+			const response = await axios.post("/register", formData);
+
+			const { token, user } = response.data;
+
+			setAuthUser(user, token);
+
 			setFormData({
 				name: "",
 				email: "",
 				password: "",
 				password_confirmation: "",
 			});
+
 			router.push("/");
 		} catch (err) {
 			setError(err?.response?.data?.errors || {});
@@ -43,6 +52,14 @@ const page = () => {
 			setIsLoading(false);
 		}
 	};
+
+	if (loaing) {
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<span className="loading loading-infinity loading-lg" />
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex items-center justify-center">
