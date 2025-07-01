@@ -1,19 +1,55 @@
-"use client";
+import { NextResponse } from "next/server";
 
-const protectedRoutes = ["/dashboard"];
-const publicRoutes = ["/login", "/register"];
+export async function middleware(request) {
+	const { pathname } = request.nextUrl;
+	const tokenCookie = request.cookies.get("auth_token")?.value;
 
-export default async function middleware(req) {
-	const path = req.nextUrl.pathname;
+	// Protect authenticated routes
+	if (pathname.startsWith("/dashboard")) {
+		if (!tokenCookie) {
+			return NextResponse.redirect(new URL("/login", request.url));
+		}
 
-	const isProtected = protectedRoutes.includes(path);
-	const isPublic = publicRoutes.includes(path);
+		try {
+			const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user`, {
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${tokenCookie}`,
+				},
+			});
 
-	const user = await fetch(`${process.env.NEXT_PUBLIC_API}/user`);
-
-	if (user) {
-		console.log("authenticated");
-	} else if (!user) {
-		console.log("not authenticated");
+			if (!response.ok) {
+				return NextResponse.redirect(new URL("/login", request.url));
+			}
+		} catch (error) {
+			return NextResponse.redirect(new URL("/login", request.url));
+		}
 	}
+
+	if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
+		if (tokenCookie) {
+			try {
+				const response = await fetch(`${process.env.NEXT_PUBLIC_API}/user`, {
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${tokenCookie}`,
+					},
+				});
+
+				if (response.ok) {
+					return NextResponse.redirect(new URL("/dashboard", request.url));
+				}
+			} catch (error) {
+				return NextResponse.next();
+			}
+		}
+	}
+
+	return NextResponse.next();
 }
+
+export const config = {
+	matcher: ["/dashboard/:path*", "/profile/:path*", "/login", "/register"],
+};
